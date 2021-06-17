@@ -162,6 +162,9 @@ class CadastroController extends Controller
 
     public function adicionarDependente(Request $request)
     {
+        $request->validate([
+            'nome' => 'required|min:3'
+        ]);
 
         try {
             self::validarIdadeDepente($request->dt_nascimento);
