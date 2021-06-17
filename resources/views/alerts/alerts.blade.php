@@ -1,3 +1,21 @@
+@if (session('dependente-create-success'))
+
+    <div class="alert alert-success">
+        {{ session('dependente-create-success') }}
+    </div>
+
+@endif
+
+@if (session('dependente-create-erro'))
+
+    <div class="alert alert-danger">
+        {{ session('dependente-create-erro') }}
+    </div>
+
+@endif
+
+
+
 @if (session('create'))
 
     <div class="alert alert-success">

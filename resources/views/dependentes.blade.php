@@ -58,31 +58,22 @@
 
                 <div class="card-body">
 
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-danger" id="" data-toggle="modal" data-target="#modal-deletar">
-                       Deletar
-                    </button>
-
 
                     <table class="table table-striped">
+
                         <thead>
                         <tr>
-                            <th scope="col"><input type="checkbox" id="checkAll"></th>
                             <th scope="col">ID</th>
+                            <th scope="col">Nome</th>
                             <th scope="col">Foto</th>
                             <th scope="col">Dt Nascimento</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Dep</th>
-                            <th scope="col">St</th>
+
                         </tr>
                         </thead>
                         <tbody>
 
-                        @foreach($cadastros as $cadastro)
                         <tr id="sid{{ $cadastro->id }}">
-                            <td>
-                                <input type="checkbox" name="ids" class="checkboxClass" value="{{ $cadastro->id }}">
-                            </td>
 
                             <td> {{ $cadastro->id }} </td>
                             <td>
@@ -92,35 +83,73 @@
                             <td> {{ $cadastro->nome }} </td>
                             <td> {{ $cadastro->dt_nascimento }} </td>
                             <td> {{ $cadastro->email }} </td>
-                            <td>
 
-                                <a href="{{ route('cadastros.listar-dependente', $cadastro->id) }}">
-                                    <button class="btn btn-primary">Dependente</button>
-                                </a>
-
-                            </td>
-
-                            <td>
-                                @if( $cadastro->status == \App\Models\Cadastro::STATUS_ATIVO)
-                                    <a href="{{ route('cadastros.desativar', $cadastro->id) }}">
-                                        <button class="btn btn-success" title="Mudar status para inativo">o</button>
-                                    </a>
-                                @elseif($cadastro->status == \App\Models\Cadastro::STATUS_INATIVO)
-                                    <a href="{{ route('cadastros.ativar', $cadastro->id) }}">
-                                        <button class="btn btn-secondary" title="Mudar status para ativo">x</button>
-                                    </a>
-                                @endif
-                            </td>
                         </tr>
-                        @endforeach
-
 
 
                         </tbody>
+
+
                     </table>
+
+                    <hr>
+
+                    <form action="{{ route('cadastros.add-dependente', $cadastro->id) }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Nome</label>
+                            <input type="text" class="form-control" name="nome" required placeholder="Nome">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Data de Nascimento</label>
+                            <input type="date" class="form-control" name="dt_nascimento" required>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+
+                    </form>
+
+
+                    <div class="row mt-5">
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                            <tr>
+
+                                <th scope="col">Nome</th>
+                                <th scope="col">Dt Nascimento</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach($cadastro->dependentes as $dependente)
+                                  <tr>
+                                <td> {{ $dependente->nome }} </td>
+                                <td> {{ $dependente->dt_nascimento }} </td>
+                                <td>
+                                    <a href="#">
+                                        <button class="btn btn-danger">Remover</button>
+                                    </a>
+
+                                </td>
+
+                             </tr>
+
+                                @endforeach
+
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
 
 
                 </div>
+
+
 
             </div>
 
@@ -135,9 +164,7 @@
 
 </div>
 
-<div class="mx-auto mt-3" style="width: 200px;">
-    {{ $cadastros->links() }}
-</div>
+
 
 
 @include('modais.modal-delete-cadastro')

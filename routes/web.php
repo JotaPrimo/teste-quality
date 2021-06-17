@@ -32,8 +32,9 @@ Route::group(['prefix' => '/cadastros'], function () {
     Route::post('/store', 'CadastroController@store')->name('cadastros.store');
     Route::get('/desativar/{id}', 'CadastroController@desativar')->name('cadastros.desativar');
     Route::get('/ativar/{id}', 'CadastroController@ativar')->name('cadastros.ativar');
-    Route::get('/add-dependente/{id}', 'CadastroController@ativar')->name('cadastros.add-dependente');
+    Route::post('/add-dependente/{id}', 'CadastroController@adicionarDependente')->name('cadastros.add-dependente');
     Route::delete('/delete', 'CadastroController@delete')->name('cadastros.delete');
+    Route::get('/listar-dependente/{id}', 'CadastroController@listarDependente')->name('cadastros.listar-dependente');
 //    Route::get('/edit/{id}', 'FichaCadastralController@edit')->name('edit');
 //    Route::post('/update/{id}', 'FichaCadastralController@update')->name('update');
 

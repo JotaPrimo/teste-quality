@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cadastro;
+use App\Models\Dependente;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -164,4 +165,38 @@ class CadastroController extends Controller
         Cadastro::whereIn('id', $ids)->delete();
         return response()->json(['success' => "Cadastros deletados com sucesso"]);
     }
+
+    public function adicionarDependente(Request $request)
+    {
+
+        try {
+            $cadastro = Cadastro::find($request->id);
+
+            $dependente = new Dependente();
+            $dependente->fill($request->all());
+            $dependente->save();
+
+            $cadastro->dependentes()->attach($cadastro->id, ['cadastro_id' => $cadastro->id,'dependente_id' => $dependente->id] );
+
+
+            session()->flash('dependente-create-success', 'Dependente cadastrado com sucesso!');
+            return redirect('/cadastros');
+
+        }catch (\Exception $exception)
+        {
+            die($exception);
+            session()->flash('dependente-create-erro', 'Erro. Dependente não foi cadastrado!');
+            return redirect()->back();
+        }
+
+    }
+
+    public function listarDependente($id)
+    {
+        $cadastro = Cadastro::find($id);
+        dd($cadastro);
+        return view('dependentes', compact('cadastro'));
+    }
+
+
 }

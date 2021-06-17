@@ -13,4 +13,9 @@ class Cadastro extends Model
     const STATUS_ATIVO = 1;
     const STATUS_INATIVO = 0;
 
+    public function dependentes()
+    {
+        return $this->belongsToMany(Dependente::class, 'cadastro_dependente', 'dependente_id');
+    }
+
 }

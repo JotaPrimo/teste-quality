@@ -17,13 +17,7 @@ class CreateDependentesTable extends Migration
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->text('nome')->nullable(false);
-            $table->text('email')->nullable(false);
-            $table->integer('size');
-            $table->text('file_name');
-            $table->integer('status')->default(1);
             $table->date('dt_nascimento')->nullable(false);
-            $table->bigInteger('cadastro_id')->unsigned();
-            $table->foreign('cadastro_id')->references('id')->on('cadastros');
             $table->timestamps();
         });
     }
