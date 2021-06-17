@@ -18,8 +18,7 @@ class CreateCadastrosTable extends Migration
             $table->bigIncrements('id');
             $table->text('nome')->nullable(false);
             $table->text('email')->nullable(false);
-            $table->integer('size');
-            $table->text('file_name');
+            $table->text('file_name')->nullable(true);
             $table->integer('status')->default(1);
             $table->date('dt_nascimento')->nullable(false);
             $table->timestamps();

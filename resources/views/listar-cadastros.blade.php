@@ -44,6 +44,7 @@
 <div class="container mt-3">
 
     @include('alerts.alerts')
+    @include('alerts.error')
 
     <div class="row mt-5">
         <div class="col-sm">

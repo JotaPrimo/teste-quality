@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Cadastro;
 use App\Models\Dependente;
-use Carbon\Carbon;
-use Carbon\Traits\Creator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -23,7 +21,6 @@ class CadastroController extends Controller
     }
 
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -32,14 +29,15 @@ class CadastroController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'email' => 'required', 'email address'
+        ]);
 
         try {
 
-            self::validarTamanhoImagem($request);
             $nameFile = self::uploadImagem($request);
             $cadastro = new Cadastro();
             $cadastro->fill($request->all());
-            $cadastro->size = $request->file_name->getSize();
             $cadastro->file_name = $nameFile;
             $cadastro->save();
 
@@ -50,6 +48,26 @@ class CadastroController extends Controller
         {
             session()->flash('error-cadastro', 'Erro. Cadastrado não realizado!');
             session()->flash('erro-tamanho-arquivo', 'Verifique o tamanho do arquivo!');
+            return redirect()->back();
+        }
+
+    }
+
+    public static function cadastrarPessoaSemFoto(Request $request)
+    {
+
+        try {
+
+            $cadastro = new Cadastro();
+            $cadastro->fill($request->all());
+            $cadastro->save();
+
+            session()->flash('create', 'Cadastrado sem foto realizado com sucesso!');
+            return redirect('/cadastros');
+
+        } catch (\Exception $exception)
+        {
+            session()->flash('error-cadastro', 'Erro. Cadastrado sem foto não realizado!');
             return redirect()->back();
         }
 
@@ -67,12 +85,6 @@ class CadastroController extends Controller
         return true;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Cadastro  $cadastro
-     * @return \Illuminate\Http\Response
-     */
     public static function uploadImagem(Request $request)
     {
         if($request->hasFile('file_name') && $request->file('file_name')->isValid())
@@ -87,43 +99,10 @@ class CadastroController extends Controller
                 return redirect()->back()->with('error', 'Não foi possivel fazer o upload da imagem');
             }
 
+            self::validarTamanhoImagem($request);
             return $nameFile;
-
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Cadastro  $cadastro
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cadastro $cadastro)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Cadastro  $cadastro
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Cadastro $cadastro)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Cadastro  $cadastro
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Cadastro $cadastro)
-    {
-        //
+         self::cadastrarPessoaSemFoto($request);
     }
 
     public function desativar($id)

@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/teste', function () {
+    return view('teste');
+})->name('teste');
+
 Route::get('/', function () {
     return view('inicio');
 })->name('inicio');
