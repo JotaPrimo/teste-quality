@@ -30,17 +30,20 @@ class CadastroController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => 'required', 'email address'
+            'email' => 'required|email:rfc,dns'
         ]);
 
         try {
 
-            $nameFile = self::uploadImagem($request);
-            $cadastro = new Cadastro();
-            $cadastro->fill($request->all());
-            $cadastro->file_name = $nameFile;
-            $cadastro->save();
+            if(self::uploadImagem($request) == false)
+            {
+                self::cadastrarPessoaSemFoto($request);
+                session()->flash('create', 'Cadastrado realizado com sucesso!');
+                return redirect('/cadastros');
+            }
 
+
+            self::cadastrarPessoaComFoto($request);
             session()->flash('create', 'Cadastrado realizado com sucesso!');
             return redirect('/cadastros');
 
@@ -51,6 +54,15 @@ class CadastroController extends Controller
             return redirect()->back();
         }
 
+    }
+
+    public function cadastrarPessoaComFoto(Request $request)
+    {
+        $nameFile = self::uploadImagem($request);
+        $cadastro = new Cadastro();
+        $cadastro->fill($request->all());
+        $cadastro->file_name = $nameFile;
+        $cadastro->save();
     }
 
     public static function cadastrarPessoaSemFoto(Request $request)
@@ -102,7 +114,8 @@ class CadastroController extends Controller
             self::validarTamanhoImagem($request);
             return $nameFile;
         }
-         self::cadastrarPessoaSemFoto($request);
+
+        return false;
     }
 
     public function desativar($id)

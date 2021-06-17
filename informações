@@ -1,0 +1,9 @@
+versão do php : 7.4.9
+Versão do mysql : 5.7.31
+versao do laravel : 7
+Composer version 2.0.8
+
+comandos para dependencias:
+
+    composer dump-autoload
+

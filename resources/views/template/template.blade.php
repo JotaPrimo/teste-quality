@@ -27,8 +27,12 @@
             <a href="{{ route('cadastros.index') }}">Listar Cadastros</a>
             <a href="{{ route('incluir-novo') }}">Incluir Novo</a>
         </div>
+        <div id="conteudoDir">
 
-        @yield('content')
+            @yield('content')
+
+        </div> <!-- FIM CONTEUDO DIR -->
+
 
     </div>
 
