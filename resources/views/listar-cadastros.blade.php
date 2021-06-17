@@ -78,7 +78,7 @@
                         </thead>
                         <tbody>
 
-                        @foreach($cadastros as $cadastro)
+                        @forelse($cadastros as $cadastro)
                         <tr id="sid{{ $cadastro->id }}">
                             <td>
                                 <input type="checkbox" name="ids" class="checkboxClass" value="{{ $cadastro->id }}">
@@ -112,7 +112,19 @@
                                 @endif
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td>
+                                    Listagem vazia
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        @endforelse
 
 
 

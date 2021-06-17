@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cadastro;
 use App\Models\Dependente;
+use Carbon\Carbon;
+use Carbon\Traits\Creator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -170,10 +172,11 @@ class CadastroController extends Controller
     {
 
         try {
+            self::validarIdadeDepente($request->dt_nascimento);
             $cadastro = Cadastro::find($request->id);
-
             $dependente = new Dependente();
             $dependente->fill($request->all());
+            $dependente->cadastro_id = $cadastro->id;
             $dependente->save();
 
             $cadastro->dependentes()->attach($cadastro->id, ['cadastro_id' => $cadastro->id,'dependente_id' => $dependente->id] );
@@ -184,7 +187,6 @@ class CadastroController extends Controller
 
         }catch (\Exception $exception)
         {
-            die($exception);
             session()->flash('dependente-create-erro', 'Erro. Dependente não foi cadastrado!');
             return redirect()->back();
         }
@@ -194,8 +196,41 @@ class CadastroController extends Controller
     public function listarDependente($id)
     {
         $cadastro = Cadastro::find($id);
-        dd($cadastro);
         return view('dependentes', compact('cadastro'));
+    }
+
+    public static function validarIdadeDepente($data)
+    {
+        // preciso aprender Carbon
+        $data = new \DateTime($data);
+        $intervalo = $data->diff(new \DateTime(date('Y-m-d')));
+        $idade = (int) $intervalo->format('%Y');
+
+        if($idade > 120)
+        {
+            session()->flash('idade-invalida', 'Erro. Dependente não pode ter idade superior á 120 ano!');
+            throw new \Exception();
+        }
+    }
+
+    public function removerDependente(Request $request)
+    {
+
+        try {
+
+            $depente = Dependente::find($request->dependente_id);
+            $cadastro = Cadastro::find($request->cadastro_id);
+            $cadastro->dependentes()->detach($cadastro->id, ['cadastro_id' => $cadastro->id,'dependente_id' => $depente->id] );
+            $depente->delete();
+
+            session()->flash('dependente-deletado-success', 'Dependente removido com sucesso!');
+            return redirect('/cadastros');
+
+        }catch (\Exception $exception)
+        {
+            session()->flash('dependente-deletado-erro', 'Erro. Dependente não foi removido!');
+            return redirect()->back();
+        }
     }
 
 

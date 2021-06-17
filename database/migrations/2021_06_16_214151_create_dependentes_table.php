@@ -18,6 +18,8 @@ class CreateDependentesTable extends Migration
             $table->bigIncrements('id');
             $table->text('nome')->nullable(false);
             $table->date('dt_nascimento')->nullable(false);
+            $table->bigInteger('cadastro_id')->unsigned()->nullable(true);
+            $table->foreign('cadastro_id')->references('id')->on('cadastros')->onDelete('cascade');
             $table->timestamps();
         });
     }

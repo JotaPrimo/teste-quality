@@ -22,7 +22,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{{ route('inicio') }}">Início</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -38,7 +39,6 @@
 
     </div>
 </nav>
-
 
 
 <div class="container mt-3">
@@ -120,24 +120,37 @@
                                 <th scope="col">Nome</th>
                                 <th scope="col">Dt Nascimento</th>
                                 <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody>
 
-                                @foreach($cadastro->dependentes as $dependente)
-                                  <tr>
-                                <td> {{ $dependente->nome }} </td>
-                                <td> {{ $dependente->dt_nascimento }} </td>
-                                <td>
-                                    <a href="#">
-                                        <button class="btn btn-danger">Remover</button>
-                                    </a>
+                            @forelse($cadastro->dependentes as $dependente)
+                                <tr>
+                                    <td> {{ $dependente->nome }} </td>
+                                    <td> {{ $dependente->dt_nascimento }} </td>
+                                    <td>
 
-                                </td>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                data-target="#modal-deletar-dependente{{ $dependente->id }}">
+                                            Remover
+                                        </button>
 
-                             </tr>
+                                    </td>
+                                    <td></td>
 
-                                @endforeach
+                                </tr>
+
+                                @include('modais.modal-delete-dependente')
+                            @empty
+                                <tr>
+                                    <td>Listagem vazia</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            @endforelse
 
 
                             </tbody>
@@ -148,7 +161,6 @@
 
 
                 </div>
-
 
 
             </div>
@@ -165,40 +177,36 @@
 </div>
 
 
-
-
 @include('modais.modal-delete-cadastro')
 
 
-
 <script>
-    $(function (e){
-       $("#checkAll").click(function (){
-           $(".checkboxClass").prop('checked', $(this).prop('checked'));
-       });
+    $(function (e) {
+        $("#checkAll").click(function () {
+            $(".checkboxClass").prop('checked', $(this).prop('checked'));
+        });
 
-       $('#deletarTodosSelecionados').click(function (e){
+        $('#deletarTodosSelecionados').click(function (e) {
             e.preventDefault();
             var allids = [];
-            $("input:checkbox[name=ids]:checked").each(function (){
+            $("input:checkbox[name=ids]:checked").each(function () {
                 allids.push($(this).val());
             });
 
             $.ajax({
-               url: "{{ route('cadastros.delete') }}",
-               type: 'DELETE',
+                url: "{{ route('cadastros.delete') }}",
+                type: 'DELETE',
                 data: {
-                    ids:allids,
-                    _token:$("input[name=_token]").val()
+                    ids: allids,
+                    _token: $("input[name=_token]").val()
                 },
-                success:function(response)
-                {
+                success: function (response) {
                     $.each(allids, function (key, val) {
-                        $('#sid'+val).remove();
+                        $('#sid' + val).remove();
                     });
                 }
             });
-       });
+        });
 
     });
 </script>

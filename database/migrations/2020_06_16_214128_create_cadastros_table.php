@@ -22,8 +22,6 @@ class CreateCadastrosTable extends Migration
             $table->text('file_name');
             $table->integer('status')->default(1);
             $table->date('dt_nascimento')->nullable(false);
-            $table->bigInteger('dependente_id')->unsigned()->nullable(true);
-            $table->foreign('dependente_id')->references('id')->on('dependentes')->onDelete('cascade');
             $table->timestamps();
         });
     }

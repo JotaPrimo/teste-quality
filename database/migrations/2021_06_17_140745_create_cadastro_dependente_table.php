@@ -16,9 +16,9 @@ class CreateCadastroDependenteTable extends Migration
         Schema::create('cadastro_dependente', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigInteger('cadastro_id')->unsigned();
-            $table->foreign('cadastro_id')->references('id')->on('cadastros');
+            $table->foreign('cadastro_id')->references('id')->on('cadastros')->onDelete('cascade');
             $table->bigInteger('dependente_id')->unsigned();
-            $table->foreign('dependente_id')->references('id')->on('dependentes');
+            $table->foreign('dependente_id')->references('id')->on('dependentes')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -1,3 +1,29 @@
+@if (session('dependente-deletado-erro'))
+
+    <div class="alert alert-danger">
+        {{ session('dependente-deletado-erro') }}
+    </div>
+
+@endif
+
+@if (session('dependente-deletado-success'))
+
+    <div class="alert alert-success">
+        {{ session('dependente-deletado-success') }}
+    </div>
+
+@endif
+
+
+@if (session('idade-invalida'))
+
+    <div class="alert alert-danger">
+        {{ session('idade-invalida') }}
+    </div>
+
+@endif
+
+
 @if (session('dependente-create-success'))
 
     <div class="alert alert-success">
