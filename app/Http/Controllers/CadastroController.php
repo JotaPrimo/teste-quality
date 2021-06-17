@@ -157,4 +157,11 @@ class CadastroController extends Controller
             return redirect()->back();
         }
     }
+
+    public function delete(Request $request)
+    {
+        $ids = $request->ids;
+        Cadastro::whereIn('id', $ids)->delete();
+        return response()->json(['success' => "Cadastros deletados com sucesso"]);
+    }
 }
